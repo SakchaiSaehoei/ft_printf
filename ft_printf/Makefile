@@ -16,16 +16,17 @@ NAME = libftprintf.a
 
 SRCS = ft_printf.c
 
-OBJS = $(SRCS:.c=.o)
+OBJS = $(SRCS:.%c=%.o)
 
 all: $(NAME)
 
 %o: %c
 	gcc $(FLAGS) -c $< -o $@
+
 $(NAME) : $(OBJS)
 	ar -rcs $(NAME) $(OBJS)
 clean:
-	rm -f &(OBJS)
+	rm -f $(OBJS)
 fclean : clean
 	rm -f $(NAME)
 re: fclean all

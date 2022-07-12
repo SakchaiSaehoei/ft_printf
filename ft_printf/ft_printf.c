@@ -70,6 +70,33 @@ int	ft_put_unsigned_int_nbr(unsigned int n)
 	return(count);
 }
 
+int	ft_put_ptr(size_t n){
+	int	count;
+	size_t	p;
+	count = 0;
+	if (n>=0 && n <= 16)
+	{
+		p = n % 16;
+		if (n == 0) {
+			count += write(1,"0",1);
+			return(count);
+		}
+		if(p == 0)
+			count += write(1,"10",2);
+		else if(p > 0 && p < 10)
+			count += ft_putnbr(p);
+		else
+			count += ft_putchar(p + 87);
+	}
+	if (n > 16)
+	{
+		count += ft_put_ptr(n / 16);
+		count += ft_put_ptr(n % 16);
+
+	}
+	return(count);
+}
+
 int	ft_puthex(unsigned int n , int	d)
 {	int	count;
 	unsigned int	p;
@@ -105,7 +132,6 @@ int	ft_printf(const char *c, ...)
 	va_start(ap,c);
 	int	count;
 	int	x_definder;
-	x_definder = 55;
 	count = 0;
 	while(*c != '\0')
 	{
@@ -134,15 +160,21 @@ int	ft_printf(const char *c, ...)
 			count += ft_putchar('%');
 			c++;
 		}
-		// else if (*(c+1)== 'p') {
-		// 	printf("%lu\n",(unsigned long)va_arg(ap,void *));
-		// 	ft_put_long_nbr((unsigned long)va_arg(ap,void *));
-		// 	c++;
-		// }
-		else if (*(c+1)== 'X' || *(c+1)== 'x') {
-			if (*(c+1)== 'x')
-				x_definder = 87;
-			count = ft_puthex(va_arg(ap,unsigned int), x_definder);
+
+		else if (*(c+1)== 'p') {
+			count += write(1,"0x",2);
+			count +=  ft_put_ptr((size_t)va_arg(ap,void *));
+			c++;
+		}
+
+		else if (*(c+1)== 'x') {
+			x_definder = 87;
+			count += ft_puthex(va_arg(ap,unsigned int), x_definder);
+			c++;
+		}
+		else if (*(c+1)== 'X') {
+			x_definder = 55;
+			count += ft_puthex(va_arg(ap,unsigned int), x_definder);
 			c++;
 		}
 
@@ -158,10 +190,13 @@ int main()
     char	*s;
 	int	count;
 	int		i;
+	int	*ptr = &i;
 	unsigned int	ui;
 	int	j;
-	s = "YEAN";
+	size_t	t;
+	*s = 's';
 	i = 55555555;
+	t = 18446744073709551615;
 	// ui = 150;
 	ui = 1234111;
 	j = 65;
@@ -172,7 +207,10 @@ int main()
 	//  i = ft_putchar(j+1);
 	// printf("\n");
 	// ft_printf("%d",i);
-	count  = ft_printf( "%x",ui);
+	printf("%p",ptr);
+	printf("\n");
+	count = ft_printf("%p",t);
+	// count  = ft_printf( "%x   %X",ui,ui);
 	printf("\n");
 	ft_printf("%d",count);
     return 0;
