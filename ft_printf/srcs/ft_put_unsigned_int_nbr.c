@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libftprintf.h                                      :+:      :+:    :+:   */
+/*   ft_put_unsigned_int_nbr.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ssaehoei <ssaehoei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/05 00:00:06 by ssaehoei          #+#    #+#             */
-/*   Updated: 2022/07/05 11:15:56 by ssaehoei         ###   ########.fr       */
+/*   Created: 2022/07/14 02:24:42 by ssaehoei          #+#    #+#             */
+/*   Updated: 2022/07/14 02:25:19 by ssaehoei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFTPRINTF_H
-# define LIBFTPRINTF_H
+#include "ft_printf.h"
+int	ft_put_unsigned_int_nbr(unsigned int n)
+{
+	int	count;
 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdarg.h>
-
-int	ft_printf(const char *c, ...);
-
-#endif
-
-
-
+	count = 0;
+	if (n < 10)
+		count += ft_putchar(n + 48);
+	if (n >= 10)
+	{
+		count += ft_putnbr(n / 10);
+		count += ft_putnbr(n % 10);
+	}
+	return (count);
+}
